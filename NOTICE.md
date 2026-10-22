@@ -1,8 +1,8 @@
 # Provenance and third-party materials
 
 Original platform code, probes, scripts, documentation, Skill and procedural
-launcher icon were extracted from the Boat project. Their MIT grant is in
-LICENSE. The grant applies to this exported kit, not to unrelated Boat assets.
+launcher icon were extracted from an earlier private application. Their MIT
+grant is in LICENSE. The grant applies to this kit, not to that application's assets.
 
 Cargo downloads upstream dependencies independently. Bevy, wgpu, Naga, ash,
 CPAL, ALSA bindings, serde_json, libc and other transitive dependencies retain

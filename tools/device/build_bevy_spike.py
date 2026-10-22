@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Cross-build the native Bevy probe with real dependencies and local patches.
 
-The game and probe share crates/boat-render for display and readiness. Driver
+The demo uses crates/trimui-brick-render for display and readiness. Driver
 compatibility changes remain in isolated wgpu vendor copies; no registry edit.
 """
 import argparse
@@ -20,7 +20,7 @@ env = os.environ.copy()
 for key, relative in (("CARGO_TARGET_DIR", "target"), ("ZIG_LOCAL_CACHE_DIR", "zig-local"),
                       ("ZIG_GLOBAL_CACHE_DIR", "zig-global")):
     env[key] = str(ROOT / ".scratch/bevy-spike" / relative)
-# C dependencies (blake3 via bevy_asset, etc.) build through zig, like build.sh.
+# C dependencies and the Rust linker use the uv-locked Zig via cross/zig.
 env["PATH"] = f"{ROOT / 'cross'}:{env['PATH']}"
 env["CC_aarch64_unknown_linux_gnu"] = str(ROOT / "cross/aarch64-linux-gnu-gcc")
 env["AR_aarch64_unknown_linux_gnu"] = "zig ar"
@@ -44,13 +44,14 @@ if args.offline:
 for config in configs:
     cmd += ["--config", config]
 subprocess.run(cmd, cwd=ROOT, env=env, check=True)
-binary = ROOT / ".scratch/bevy-spike/target/aarch64-unknown-linux-gnu/release/boat-bevy-spike"
+binary = ROOT / ".scratch/bevy-spike/target/aarch64-unknown-linux-gnu/release/brick-bevy-demo"
 sources = [ROOT / "experiments/bevy-spike" / p for p in ("Cargo.toml", "Cargo.lock")]
 sources += sorted((ROOT / "experiments/bevy-spike/src").rglob("*.*"))
-sources += [ROOT / "Cargo.toml", ROOT / "crates/boat-render/Cargo.toml"]
-sources += sorted((ROOT / "crates/boat-render/src").rglob("*.*"))
+sources += [ROOT / "Cargo.toml", ROOT / "crates/trimui-brick-render/Cargo.toml"]
+sources += sorted((ROOT / "crates/trimui-brick-render/src").rglob("*.*"))
 sources += [ROOT / path for path in (
-    ".cargo/config.toml", "cross/zig-cc-wrapper", "cross/aarch64-linux-gnu-gcc",
+    ".cargo/config.toml", "cross/zig", "cross/zig-cc-wrapper", "cross/aarch64-linux-gnu-gcc",
+    "pyproject.toml", "uv.lock",
     "tools/device/build_bevy_spike.py", "tools/device/prepare_wgpu_hal.py",
     "tools/device/prepare_wgpu_display.py",
 )]
@@ -58,7 +59,7 @@ metadata = {
     "binary_sha256": hashlib.sha256(binary.read_bytes()).hexdigest(),
     "build_command": cmd,
     "rustc": subprocess.check_output(["rustc", "--version"], text=True).strip(),
-    "zig": subprocess.check_output(["zig", "version"], text=True).strip(),
+    "zig": subprocess.check_output(["zig", "version"], env=env, text=True).strip(),
     "patched_crates": crates,
     "dependency_resolution": "real crate archives; no optional stubs",
     "source_sha256": {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest() for p in sources},

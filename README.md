@@ -22,12 +22,12 @@ These are bounded device results, not a performance benchmark or a claim of
 support for every firmware, original Brick, Bevy plugin or renderer feature.
 
 The implementation uses `bevy_render` and wgpu's Vulkan backend. A camera renders
-into an image; `boat-render` blits it to a `VK_KHR_display` surface after Bevy's
+into an image; `trimui-brick-render` blits it to a `VK_KHR_display` surface after Bevy's
 render submission. There is no SDL dependency or desktop compositor on this path.
 
 Included:
 
-- Shared `boat-render` platform crate and a two-sprite animated example, with no
+- Shared `trimui-brick-render` platform crate and a two-sprite animated example, with no
   game art, fonts or audio assets.
 - Small wgpu probes, fourteen shader cases, system snapshots and ELF inspection.
 - Local-copy wgpu patches, binary/source/patch hashes, launcher packaging and
@@ -43,19 +43,17 @@ supported build entrypoint in this kit.
 
 ## Build the minimal example
 
-Run commands from the repository root. The tested host is macOS with Rust
-1.98.0 and Zig; Linux hosts need their usual build utilities. Python 3.12+ and
-Pillow 12+ are needed for launcher packaging (the Rust build itself uses Python's
-standard library). Record your actual compiler versions when reproducing;
-the extraction host has Zig 0.17.0.
+Run commands from the repository root. Install Rust (tested with 1.98.0),
+[uv](https://docs.astral.sh/uv/getting-started/installation/) and a working SSH
+client for device access. `uv run` manages Python 3.12+ and installs the locked
+Pillow and Zig 0.17.0 tools from `pyproject.toml` / `uv.lock`. No manual Python
+environment activation or separate Zig installation is required. Linux hosts
+also need their usual build utilities.
 
 ```sh
 rustup target add aarch64-unknown-linux-gnu
-python3 -m venv .venv
-. .venv/bin/activate
-python3 -m pip install -r requirements-dev.txt
-python3 tools/device/build_bevy_spike.py
-python3 tools/device/package_bevy_spike.py --seconds 30
+uv run tools/device/build_bevy_spike.py
+uv run tools/device/package_bevy_spike.py --seconds 30
 ```
 
 The first build downloads real crates. With a populated Cargo cache, use
@@ -64,10 +62,12 @@ SDK, Vulkan C headers or device snapshot is needed to compile this example.
 The optional audio path needs your own device's `libasound.so.2` snapshot.
 
 The binary is at
-`.scratch/bevy-spike/target/aarch64-unknown-linux-gnu/release/boat-bevy-spike`;
-the launcher App is `dist/Apps/boat-bevy-wgpu`. `boat` names in crate, executable,
-environment and App paths are preserved from the source project so the existing
-tools agree; they do not refer to a game dependency.
+`.scratch/bevy-spike/target/aarch64-unknown-linux-gnu/release/brick-bevy-demo`;
+the launcher App is `dist/Apps/brick-bevy-demo`. The reusable platform crate is
+`trimui-brick-render`; the standalone examples and App paths use Brick Pro names.
+Builds use the uv-locked Zig through `cross/zig`. To populate the Python cache
+in advance, use `uv sync --locked`; `uv run --offline ...` also requires a
+populated Python cache, separate from Cargo's `--offline` option.
 
 ## Run and verify on your device
 
@@ -76,13 +76,16 @@ Configure your own SSH alias in `~/.ssh/config`, copy `ssh.local.sh.example` to
 The example selects key authentication before older tools' password-auth default,
 and puts forwarded SSH options before the destination.
 No host, credentials or device libraries are distributed.
+Alternatively, set `BRICK_SSH_WRAPPER` to the absolute path of your own private
+wrapper. Input probing can be overridden with `BRICK_EVDEV`; see
+[integration](docs/integration.md).
 
 ```sh
 # Writes only this App directory on your SD card, preserving its save/ history.
-python3 tools/device/install_app.py \
-  --package dist/Apps/boat-bevy-wgpu --app-name boat-bevy-wgpu
-# On the handheld, launch "boat (Bevy WGPU)" from Apps and wait for its return.
-python3 tools/device/collect_bevy_spike.py
+uv run tools/device/install_app.py \
+  --package dist/Apps/brick-bevy-demo --app-name brick-bevy-demo
+# On the handheld, launch "Brick Pro (Bevy Demo)" from Apps and wait for its return.
+uv run tools/device/collect_bevy_spike.py
 ```
 
 Success requires a clean exit, final surface readback, matching installed binary
@@ -94,10 +97,10 @@ the launcher and flickers**; use the launcher for visible acceptance.
 For a non-presenting GPU check over SSH:
 
 ```sh
-python3 tools/device/run_wgpu.py \
-  --binary .scratch/bevy-spike/target/aarch64-unknown-linux-gnu/release/boat-bevy-spike \
+uv run tools/device/run_wgpu.py \
+  --binary .scratch/bevy-spike/target/aarch64-unknown-linux-gnu/release/brick-bevy-demo \
   --output .scratch/bevy-spike/runs/first-offscreen
-python3 tools/device/verify_bevy_spike_ppm.py \
+uv run tools/device/verify_bevy_spike_ppm.py \
   .scratch/bevy-spike/runs/first-offscreen/bevy-spike.ppm
 ```
 
@@ -124,7 +127,8 @@ history are not included. A snapshot tool does not grant redistribution rights
 to the resulting firmware dump.
 
 For fixes and reproduction reports, see [CONTRIBUTING.md](CONTRIBUTING.md).
-The kit was extracted from Boat; [SOURCE-MANIFEST.json](SOURCE-MANIFEST.json)
-records the source revision and exact exported file hashes. It is a source
+The kit was extracted from an earlier private application;
+[SOURCE-MANIFEST.json](SOURCE-MANIFEST.json) records its original source revision
+and a refreshed inventory of this kit's current file hashes. It is a source
 provenance record, not a device test result. This project is not affiliated with
 TrimUI, Bevy or the wgpu project.

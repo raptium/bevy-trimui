@@ -33,17 +33,18 @@ for crate in crates:
 if args.display:
     cmd += ["--features", "display-import"]
 subprocess.run(cmd, cwd=ROOT, env=env, check=True)
-binary = ROOT / ".scratch/wgpu-probe/target/aarch64-unknown-linux-gnu/release/boat-wgpu-probe"
+binary = ROOT / ".scratch/wgpu-probe/target/aarch64-unknown-linux-gnu/release/brick-wgpu-probe"
 sources = [ROOT / "experiments/wgpu-probe" / p for p in ("Cargo.toml", "Cargo.lock")]
 sources += sorted((ROOT / "experiments/wgpu-probe/src").rglob("*.*"))
 sources += [ROOT / path for path in (
-    ".cargo/config.toml", "cross/zig-cc-wrapper", "cross/aarch64-linux-gnu-gcc",
+    ".cargo/config.toml", "cross/zig", "cross/zig-cc-wrapper", "cross/aarch64-linux-gnu-gcc",
+    "pyproject.toml", "uv.lock",
     "tools/device/build_wgpu.py", "tools/device/prepare_wgpu_hal.py",
     "tools/device/prepare_wgpu_display.py",
 )]
 metadata = {"binary_sha256": hashlib.sha256(binary.read_bytes()).hexdigest(), "build_command": cmd,
             "rustc": subprocess.check_output(["rustc", "--version"], text=True).strip(),
-            "zig": subprocess.check_output(["zig", "version"], text=True).strip(),
+            "zig": subprocess.check_output(["zig", "version"], env=env, text=True).strip(),
             "patched_crates": crates, "display_import": args.display,
             "source_sha256": {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest() for p in sources},
             "patch_sha256": {p.name: hashlib.sha256(p.read_bytes()).hexdigest()

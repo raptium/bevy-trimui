@@ -21,7 +21,7 @@
     "target": "aarch64-unknown-linux-gnu",
     "link_glibc_floor": "2.25",
     "device_glibc_observed": "2.33",
-    "build": "python3 tools/device/build_bevy_spike.py",
+    "build": "uv run tools/device/build_bevy_spike.py",
     "example_enables_audio": false
   },
   "required_local_patches": ["pvr-timeline-values", "wgpu-hal-display-import", "wgpu-core-display-import", "wgpu-display-import"],
@@ -34,7 +34,7 @@
     {"date": "2026-10-17", "check": "separate game speaker listening", "status": "passed_historical_not_shipped", "cpal": "0.17.3", "format": "stereo S16_LE 48000 Hz", "period_frames": 1024, "buffer_frames": 2048, "binary_sha256": "c445ad7788d32f59646289f878eb8cd313fca4e9d3b610f9d1c3423bcd6944bc"}
   ],
   "new_build_gates": ["source_and_build", "elf_and_runtime_libraries", "offscreen_pixels", "launcher_surface_and_animation_pixels", "human_panel_input_and_optional_listening"],
-  "launcher_verification_command": "python3 tools/device/collect_bevy_spike.py",
+  "launcher_verification_command": "uv run tools/device/collect_bevy_spike.py",
   "animation_success_marker": "BEVY_ANIMATION_PASSED",
   "not_established": ["original TrimUI Brick", "other firmware or DDK", "all Bevy plugins", "3D and postprocessing", "long-duration stability", "suspend and resume", "headphone and Bluetooth audio"],
   "raw_historical_archives_included": false

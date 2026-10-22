@@ -10,11 +10,19 @@ program failures and panel observations from pixel checks.
 For local validation:
 
 ```sh
-python3 -m compileall -q tools
+uv run python -m compileall -q tools
+uv run python -m unittest discover -s tests
 cargo fmt --manifest-path experiments/bevy-spike/Cargo.toml -- --check
-python3 tools/device/build_bevy_spike.py
-python3 tools/device/package_bevy_spike.py --seconds 30
+uv run tools/device/build_bevy_spike.py
+uv run tools/device/package_bevy_spike.py --seconds 30
+uv run tools/update_source_manifest.py
 ```
+
+Keep Python tooling dependencies in `pyproject.toml` and commit `uv.lock`.
+The local transport test uses a temporary filesystem and an SSH fixture; it
+exercises packaging, save preservation and real pixel verification without
+connecting to hardware. Build metadata hashes the uv lockfile and Zig wrapper
+as well as the Rust sources and driver patches.
 
 A build-only contribution can explicitly say that device execution was not
 performed. A new compatibility claim needs its own dated device run; the

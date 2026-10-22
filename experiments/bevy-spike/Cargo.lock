@@ -1164,23 +1164,13 @@ dependencies = [
 ]
 
 [[package]]
-name = "boat-bevy-spike"
+name = "brick-bevy-demo"
 version = "0.1.0"
 dependencies = [
  "bevy",
- "boat-render",
  "libc",
  "serde_json",
-]
-
-[[package]]
-name = "boat-render"
-version = "0.1.0"
-dependencies = [
- "ash",
- "bevy",
- "serde_json",
- "wgpu",
+ "trimui-brick-render",
 ]
 
 [[package]]
@@ -2973,6 +2963,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "trimui-brick-render"
+version = "0.1.0"
+dependencies = [
+ "ash",
+ "bevy",
+ "serde_json",
+ "wgpu",
+]
+
+[[package]]
 name = "typeid"
 version = "1.0.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3150,8 +3150,6 @@ dependencies = [
 [[package]]
 name = "wgpu"
 version = "29.0.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "76e8840e1ba2881d4cbb18d2147627a56af426ff064c0401eb0c8410c6325d07"
 dependencies = [
  "arrayvec",
  "bitflags",
@@ -3179,8 +3177,6 @@ dependencies = [
 [[package]]
 name = "wgpu-core"
 version = "29.0.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2f519832254e56965a9940c4af57dcb75f702b6f6fa4a0b172f685395843a4d7"
 dependencies = [
  "arrayvec",
  "bit-set",
@@ -3229,8 +3225,6 @@ dependencies = [
 [[package]]
 name = "wgpu-hal"
 version = "29.0.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "97ace1c17727311c22a46e4e3faf56ea6de81af99dcc839bdfb54857b94d448d"
 dependencies = [
  "android_system_properties",
  "arrayvec",

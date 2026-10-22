@@ -2,7 +2,7 @@
 
 ## Rendering boundary
 
-`crates/boat-render` is the shared platform layer. The minimal example in
+`crates/trimui-brick-render` is the shared platform layer. The minimal example in
 `experiments/bevy-spike/src/main.rs` exercises it without game assets.
 
 ```text
@@ -10,7 +10,7 @@ Bevy main world: Camera2d + Sprite + Transform
     -> extraction / native Bevy render graph
     -> 1024x768 Rgba8UnormSrgb image target
     -> render_system completes GPU submission
-    -> boat-render fullscreen blit
+    -> trimui-brick-render fullscreen blit
     -> imported VK_KHR_display surface / swapchain / present
 ```
 
@@ -35,7 +35,7 @@ frame may be black even when later frames are correct.
 ## Dependencies and patches
 
 Keep Bevy `=0.19.1`, wgpu/hal/core `29.0.4` and ash `=0.38.0` aligned with the
-lockfiles. Enable `boat-render/brick-display` only for the handheld path. The
+lockfiles. Enable `trimui-brick-render/brick-display` only for the handheld path. The
 crate currently inherits Bevy from the root workspace; when moving it, carry
 over that dependency declaration or replace it with the same explicit features.
 `publish = false` reflects that it uses a locally patched wgpu API; this is a
@@ -72,7 +72,8 @@ Cargo registry or replace device libraries.
 the observed device actually has 2.33. The linker embeds
 `RUNPATH=/rom/usr/trimui/lib`. The C shim preserves argument boundaries while
 translating the Rust target triple and filtering the unsupported Cortex-A53
-erratum flag. Both shims require Python 3 in addition to Zig.
+erratum flag. `uv run` supplies the Python environment; `cross/zig` runs its
+locked `ziglang` dependency, including when Cargo invokes the linker shims.
 
 No SDL SDK, Vulkan C headers or device library upload is required for the
 renderer example. For optional audio, use the device ABI as described in
@@ -82,12 +83,12 @@ patches and the `.build.json` alongside each binary.
 ## Input
 
 The example's `src/evdev.rs` probes `/dev/input/event0..11` by capability rather
-than assuming event0. `BOAT_EVDEV` overrides the path. It decodes 24-byte
+than assuming event0. `BRICK_EVDEV` overrides the path. It decodes 24-byte
 little-endian `input_event` records for 64-bit Linux. Guide (`0x13c`) and Start
 (`0x13b`) exit on a press. This small reader is an exit mechanism, not a complete
 controller abstraction or reconnection layer.
 
-Boat's game experiments found D-pad direction in `EV_ABS` `ABS_HAT0X/Y`, requiring
+The original game experiments found D-pad direction in `EV_ABS` `ABS_HAT0X/Y`, requiring
 button edges for menu navigation as well as held movement. The physical printed
 A/B mapping used East=A/confirm and South=B/back; do not assume desktop
 South=confirm matches the labels. Recheck raw input and the actual controls on
@@ -102,7 +103,7 @@ Other changes included explicit `#[extract_app(RenderApp)]`, renderer wrapper
 access, `Queue::present`, fallible mapped ranges and the HAL surface signature.
 
 This kit intentionally ships the 0.19 baseline only. The historical 0.20 script
-read a fixed source tree from Boat's old Git history and is not included as a
+read a fixed source tree from the original private Git history and is not included as a
 portable command. Migrate from the included source in a separate branch, with
 new lockfiles, source review and device validation. Historical plugin-version
 availability is not a current dependency recommendation.

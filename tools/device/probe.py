@@ -31,6 +31,7 @@ def main() -> None:
     include.mkdir(parents=True, exist_ok=True)
     shutil.copytree(headers, include / "vulkan", dirs_exist_ok=True)
     env = os.environ.copy()
+    env["PATH"] = f"{ROOT / 'cross'}:{env['PATH']}"
     env["ZIG_LOCAL_CACHE_DIR"] = str(build / "zig-local")
     env["ZIG_GLOBAL_CACHE_DIR"] = str(build / "zig-global")
     binary = build / "vulkan-probe"
@@ -39,7 +40,7 @@ def main() -> None:
            "-O2", str(source), "-ldl", "-o", str(binary)]
     subprocess.run(cmd, env=env, check=True)
     remote = """set -eu
-probe_path=$(mktemp /tmp/boat-vulkan-probe.XXXXXX)
+probe_path=$(mktemp /tmp/brick-vulkan-probe.XXXXXX)
 trap 'rm -f "$probe_path"' EXIT
 cat > "$probe_path"
 chmod 700 "$probe_path"

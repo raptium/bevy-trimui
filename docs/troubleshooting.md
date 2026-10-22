@@ -60,10 +60,10 @@ writes for local arrays. Do not extrapolate one pass to all generated SPIR-V.
 ```sh
 cargo fetch --manifest-path experiments/wgpu-probe/Cargo.toml \
   --target aarch64-unknown-linux-gnu
-python3 tools/device/build_wgpu.py
-python3 tools/device/run_wgpu.py -- --vertex-array --frames 2
+uv run tools/device/build_wgpu.py
+uv run tools/device/run_wgpu.py -- --vertex-array --frames 2
 # Run separately; the previous case is an intentionally failing comparison.
-python3 tools/device/run_wgpu.py -- --vertex-array-store --frames 2
+uv run tools/device/run_wgpu.py -- --vertex-array-store --frames 2
 ```
 
 `build_wgpu.py --stock` omits the submit workaround for a deliberate driver

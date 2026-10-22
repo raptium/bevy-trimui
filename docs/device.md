@@ -44,10 +44,10 @@ filename, an SDK label or a kernel configuration is not an execution test.
 After configuring private SSH access:
 
 ```sh
-python3 tools/device/snapshot.py
-python3 tools/device/inspect_snapshot.py .device-snapshots/brick-pro-YOUR-TIMESTAMP
+uv run tools/device/snapshot.py
+uv run tools/device/inspect_snapshot.py .device-snapshots/brick-pro-YOUR-TIMESTAMP
 # Optional C-only enumeration; --sdk is a directory containing usr/include/vulkan.
-python3 tools/device/probe.py \
+uv run tools/device/probe.py \
   --snapshot .device-snapshots/brick-pro-YOUR-TIMESTAMP --sdk /path/to/sdk
 ```
 

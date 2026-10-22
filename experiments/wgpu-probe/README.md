@@ -7,14 +7,14 @@ patches as the Bevy example.
 ```sh
 cargo fetch --manifest-path experiments/wgpu-probe/Cargo.toml \
   --target aarch64-unknown-linux-gnu
-python3 tools/device/build_wgpu.py
-python3 tools/device/run_wgpu.py -- --frames 120
+uv run tools/device/build_wgpu.py
+uv run tools/device/run_wgpu.py -- --frames 120
 
 # Query display capabilities (no visible drawing).
-python3 tools/device/build_wgpu.py --display
-python3 tools/device/run_wgpu.py -- --display-info
+uv run tools/device/build_wgpu.py --display
+uv run tools/device/run_wgpu.py -- --display-info
 # Direct presentation is diagnostic: it competes with launcher and may flicker.
-python3 tools/device/run_wgpu.py -- --present --frames 120
+uv run tools/device/run_wgpu.py -- --present --frames 120
 ```
 
 `build_wgpu.py` builds offline after the explicit fetch. `--stock` is a deliberate

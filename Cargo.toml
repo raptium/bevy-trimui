@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = ["crates/boat-render"]
+members = ["crates/trimui-brick-render"]
 
 [workspace.dependencies]
 bevy = { version = "=0.19.1", default-features = false, features = [

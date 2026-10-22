@@ -1,0 +1,6 @@
+#!/usr/bin/env python3
+"""Run the project's uv-locked Zig toolchain with its Python interpreter."""
+import os
+import sys
+
+os.execv(sys.executable, [sys.executable, "-m", "ziglang", *sys.argv[1:]])

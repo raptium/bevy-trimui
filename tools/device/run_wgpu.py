@@ -20,12 +20,12 @@ ROOT = Path(__file__).resolve().parents[2]
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--binary", type=Path, default=ROOT / ".scratch/wgpu-probe/target/aarch64-unknown-linux-gnu/release/boat-wgpu-probe")
+    ap.add_argument("--binary", type=Path, default=ROOT / ".scratch/wgpu-probe/target/aarch64-unknown-linux-gnu/release/brick-wgpu-probe")
     ap.add_argument("--output", type=Path)
     ap.add_argument("--timeout", type=int, default=240,
                     help="SSH timeout including compressed binary transfer and execution")
     ap.add_argument("--env", action="append", default=[], metavar="NAME=VALUE",
-                    help="environment for the isolated program, e.g. BOAT_HEADLESS=1")
+                    help="environment for the isolated program, e.g. RUST_LOG=info")
     ap.add_argument("probe_args", nargs="*")
     args = ap.parse_args()
     environment = {}
@@ -44,21 +44,13 @@ def main() -> None:
     build_info = json.loads(build_file.read_text()) if build_file.is_file() else None
     if build_info and build_info["binary_sha256"] != binary_hash:
         raise SystemExit("Binary differs from build metadata; rebuild using build_wgpu.py")
-    source_path_aliases = {}
     unavailable_sources = []
     if build_info and build_info.get("source_sha256"):
         source_files = []
         for name in build_info["source_sha256"]:
             path = ROOT / name
-            # Old binary metadata stays immutable after repository cleanup.
-            if not path.is_file() and name.startswith("demo/"):
-                path = ROOT / "game" / name.removeprefix("demo/")
-            elif not path.is_file() and name.startswith("spike/"):
-                path = ROOT / "experiments" / name.removeprefix("spike/")
             if path.is_file():
                 source_files.append(path)
-                if str(path.relative_to(ROOT)) != name:
-                    source_path_aliases[name] = str(path.relative_to(ROOT))
             else:
                 unavailable_sources.append(name)
     else:
@@ -68,7 +60,7 @@ def main() -> None:
     output = (args.output or ROOT / ".scratch/wgpu-probe/runs" / datetime.now().strftime("%Y%m%d-%H%M%S")).resolve()
     output.mkdir(parents=True, exist_ok=False)
     remote = r"""set -u
-run_dir=$(mktemp -d /tmp/boat-wgpu-probe.XXXXXX) || exit 1
+run_dir=$(mktemp -d /tmp/brick-wgpu-probe.XXXXXX) || exit 1
 child=
 watcher=
 cleanup() {
@@ -100,7 +92,6 @@ tar -cf - .
     provenance = {"binary": str(binary), "binary_sha256": binary_hash,
                   "args": args.probe_args, "build": build_info,
                   "source_at_run_sha256": source_hashes,
-                  "source_path_aliases": source_path_aliases,
                   "unavailable_sources": unavailable_sources,
                   "transport": "gzip", "environment": environment}
     provenance_file = output / "provenance.json"

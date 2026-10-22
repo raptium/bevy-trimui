@@ -4,7 +4,7 @@
 > 在法律允许的最大范围内，作者不承担责任，包括设备损坏、变砖或爆炸。
 > 直白地说：机器爆炸了，也别找作者负责。详见[免责声明](DISCLAIMER.md)。
 
-这是一套从 Boat 提取的独立平台工具：原生 Bevy / wgpu Vulkan 渲染、
+这是一套独立的 Brick Pro 平台工具：原生 Bevy / wgpu Vulkan 渲染、
 `VK_KHR_display` 上屏、evdev 退出、厂商驱动兼容补丁和像素验收工具。
 不需要游戏美术、字体、设备私有库或原项目 Git 历史。
 
@@ -19,17 +19,19 @@ AI 从 [AGENTS.md](AGENTS.md) 开始，或使用
 
 ```sh
 rustup target add aarch64-unknown-linux-gnu
-python3 -m venv .venv
-. .venv/bin/activate
-python3 -m pip install -r requirements-dev.txt
-python3 tools/device/build_bevy_spike.py
-python3 tools/device/package_bevy_spike.py --seconds 30
+uv run tools/device/build_bevy_spike.py
+uv run tools/device/package_bevy_spike.py --seconds 30
 # 配好自己的 ssh.local.sh 后安装
-python3 tools/device/install_app.py \
-  --package dist/Apps/boat-bevy-wgpu --app-name boat-bevy-wgpu
+uv run tools/device/install_app.py \
+  --package dist/Apps/brick-bevy-demo --app-name brick-bevy-demo
 # 在掌机 Apps 里启动，等自动返回后收集
-python3 tools/device/collect_bevy_spike.py
+uv run tools/device/collect_bevy_spike.py
 ```
+
+安装 Rust 和 [uv](https://docs.astral.sh/uv/getting-started/installation/) 后，
+直接从仓库根目录运行以上命令。`uv run` 会自动管理 Python 环境，并按 `uv.lock`
+安装 Pillow 和 Zig，无需手动激活虚拟环境或另装 Zig。
+平台 crate 名为 `trimui-brick-render`，掌机 Apps 中显示为 `Brick Pro (Bevy Demo)`。
 
 成功标志是 `BEVY_ANIMATION_PASSED`，包含二进制哈希、退出状态、多帧实际像素与
 场景坐标核对。编译成功、进程退出 0、不断调用 present，都不能单独证明上屏正确。

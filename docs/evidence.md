@@ -2,7 +2,7 @@
 
 ## Historical reference results
 
-These statements were transcribed from Boat's dated research records, not
+These statements were transcribed from the original dated research records, not
 rerun during extraction. Raw firmware dumps and full device run archives stay
 private; this public kit ships the source, procedures and selected result
 summaries. Public consumers can reproduce the experiments but cannot audit all

@@ -5,7 +5,7 @@
 //! reader adds "press Guide (or Start) to quit" so a session does not have to
 //! run to its limit. It is a trimmed copy of `game/src/evdev.rs`, where the
 //! same node-probing logic is exercised on this device: the pad is an
-//! ordinary `/dev/input/event*` node carrying `BTN_*` codes; `BOAT_EVDEV`
+//! ordinary `/dev/input/event*` node carrying `BTN_*` codes; `BRICK_EVDEV`
 //! overrides which node is opened.
 
 /// One decoded `struct input_event`.
@@ -67,7 +67,7 @@ mod imp {
     }
 
     pub fn start() -> Option<(PathBuf, Receiver<EvdevEvent>)> {
-        let path = match std::env::var("BOAT_EVDEV") {
+        let path = match std::env::var("BRICK_EVDEV") {
             Ok(explicit) => PathBuf::from(explicit),
             Err(_) => find_pad()?,
         };

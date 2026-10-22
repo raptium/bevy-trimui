@@ -2,7 +2,7 @@
 
 The minimal sprite example has no audio dependency. This kit includes
 `tools/device/brick_audio.py` and `alsa-brick.conf` so an application using Bevy
-audio can reproduce the platform configuration without importing Boat's game.
+audio can reproduce the platform configuration without importing the original game.
 
 The reference game used Bevy 0.19.1, rodio 0.22.2 and CPAL 0.17.3. On 2026-10-17
 the operator confirmed music, footsteps, menu sounds and room transitions through
@@ -62,7 +62,7 @@ buffer duration, not a measured end-to-end input-to-speaker latency.
 The helper can prepare inputs independently:
 
 ```sh
-python3 tools/device/brick_audio.py \
+uv run tools/device/brick_audio.py \
   --snapshot .device-snapshots/brick-pro-YOUR-TIMESTAMP \
   --output .scratch/my-app
 ```

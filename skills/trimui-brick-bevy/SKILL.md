@@ -5,7 +5,9 @@ description: Build, integrate, diagnose and verify native Bevy/wgpu Vulkan appli
 
 # TrimUI Brick Pro native Bevy
 
-Locate the kit checkout from the user's task or workspace. Read its `AGENTS.md`
+Locate the kit checkout from the user's task or workspace. Use `uv run` for its
+Python tools and maintain dependencies in `pyproject.toml` / `uv.lock` rather than
+requirements files or manual environments. Read its `AGENTS.md`
 and `docs/compatibility.json`; when installed separately, resolve these from the
 checkout, not from this skill's install directory. If the kit is missing, ask
 for its location rather than guessing tools, hosts or a clone URL.
@@ -13,9 +15,9 @@ for its location rather than guessing tools, hosts or a clone URL.
 Route by the actual task:
 
 - **First build/run:** read `README.md` and `experiments/bevy-spike/README.md`.
-  Use `tools/device/build_bevy_spike.py`; record Rust/Zig versions and the
+  Use `uv run tools/device/build_bevy_spike.py`; record Rust/Zig versions and the
   resulting `.build.json`. `--offline` requires already cached real crates.
-- **Port an application:** read `docs/integration.md`; reuse `boat-render`, the
+- **Port an application:** read `docs/integration.md`; reuse `trimui-brick-render`, the
   image target, readiness gate, display plugin and local patch configuration.
 - **Device investigation:** read `docs/device.md`. Query the current firmware,
   actual ELF libraries and GPU instead of substituting an older published SDK.

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Install a packaged boat launcher App onto the Brick's SD card over SSH.
+"""Install a packaged Brick Pro launcher App onto the Brick's SD card over SSH.
 
 Streams a compressed tar into a temporary folder, verifies the binary hash,
 then replaces the app while preserving its save directory and run evidence. The
@@ -20,14 +20,14 @@ import tempfile
 
 ROOT = Path(__file__).resolve().parents[2]
 SSH = ROOT / "ssh.sh"
-APP = "boat-native"
+APP = "brick-bevy-demo"
 
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--package", type=Path, default=ROOT / "dist/Apps" / APP)
     ap.add_argument("--app-name", default=APP,
-                    help="launcher directory name (default: boat-native)")
+                    help="launcher directory name (default: brick-bevy-demo)")
     ap.add_argument("--remote-dir", default="/mnt/SDCARD/Apps",
                     help="Apps directory on the device's SD card")
     args = ap.parse_args()
@@ -36,12 +36,12 @@ def main() -> None:
     app = args.app_name
 
     package = args.package.resolve()
-    for required in ("boat", "launch.sh", "config.json"):
+    for required in ("brick-bevy-demo", "launch.sh", "config.json"):
         if not (package / required).is_file():
             raise SystemExit(f"{package}/{required} missing; run the appropriate package_* tool first")
 
     remote = args.remote_dir.rstrip("/")
-    digest = hashlib.sha256((package / "boat").read_bytes()).hexdigest()
+    digest = hashlib.sha256((package / "brick-bevy-demo").read_bytes()).hexdigest()
     remote_cmd = "set -eu\ncd " + shlex.quote(remote) + "\n" + r"""
 stage=$(mktemp -d .APP_NAME-install.XXXXXX)
 cleanup() {
@@ -52,9 +52,9 @@ cleanup() {
 }
 trap cleanup EXIT HUP INT TERM
 tar -xzf - -C "$stage"
-test -x "$stage/APP_NAME/boat"
+test -x "$stage/APP_NAME/brick-bevy-demo"
 test -f "$stage/APP_NAME/config.json"
-printf '%s  %s\n' BINARY_HASH "$stage/APP_NAME/boat" | sha256sum -c -
+printf '%s  %s\n' BINARY_HASH "$stage/APP_NAME/brick-bevy-demo" | sha256sum -c -
 if [ -d APP_NAME/save ]; then
     cp -a APP_NAME/save/. "$stage/APP_NAME/save/"
 fi

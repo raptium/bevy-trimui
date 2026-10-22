@@ -1,5 +1,5 @@
 [package]
-name = "boat-bevy-spike"
+name = "brick-bevy-demo"
 version = "0.1.0"
 edition = "2024"
 publish = false
@@ -22,7 +22,7 @@ bevy = { version = "=0.19.1", default-features = false, features = [
 ] }
 # Direct evdev reader for the pad-based exit (src/evdev.rs).
 libc = "0.2"
-boat-render = { path = "../../crates/boat-render", features = ["brick-display"] }
+trimui-brick-render = { path = "../../crates/trimui-brick-render", features = ["brick-display"] }
 serde_json = "1"
 
 [profile.release]

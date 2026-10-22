@@ -1,10 +1,6 @@
-# Cross-compile settings for the TrimUI Brick (aarch64-unknown-linux-gnu).
-#
-# There is no aarch64 toolchain on this macOS host and TrimUI's published Linaro
-# toolchain ships x86_64 Linux binaries, so zig stands in as the compiler driver.
-# glibc is pinned to 2.25 to match that toolchain, and the device's library path
-# is baked into RUNPATH so the binary is self-contained (the device rootfs is
-# OpenWrt with no /etc/ld.so.conf).
+# Cross-compile settings for TrimUI Brick Pro (aarch64-unknown-linux-gnu).
+# Run the Python builders with uv run: cross/zig selects the uv-locked Zig.
+# The linker targets glibc 2.25 and embeds the firmware library path in RUNPATH.
 #
 # Relative paths here resolve against the directory *above* `.cargo/`, i.e. the
 # repository root.

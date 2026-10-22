@@ -1,7 +1,6 @@
 /.scratch/
 /.device-snapshots/
 /.venv/
-/.ci-bin/
 /.sdk/
 /dist/
 /target/

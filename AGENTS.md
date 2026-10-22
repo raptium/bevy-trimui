@@ -1,7 +1,9 @@
 # Agent entrypoint
 
-This is an extracted, asset-free Brick Pro platform kit. Run commands from this
-checkout's root. `SOURCE-MANIFEST.json` identifies the extraction, not a test run.
+This is an asset-free Brick Pro platform kit. Run commands from this checkout's
+root with `uv run`; dependencies belong in `pyproject.toml` and `uv.lock`.
+Use the project environment for Python tools; do not add requirements files or
+manual environment setup. `SOURCE-MANIFEST.json` records provenance, not a test run.
 
 Read only what the task needs:
 
@@ -33,7 +35,7 @@ Preserve these constraints:
 - A process exit, callback counter, GPU readback and human observation are
   different evidence. Report exactly which were collected, with hashes.
 
-The kit contains no 0.20 migration script: Boat's historical experiment read
+The kit contains no 0.20 migration script: the historical experiment read
 an old Git object unavailable in a fresh clone. Its findings are documented,
 not represented as a reproducible build here. Do not invent missing history.
 

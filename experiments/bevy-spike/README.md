@@ -2,18 +2,18 @@
 
 Two colored sprites on a 1024×768 image target. Default mode captures a static
 offscreen PPM; `--display --animate --seconds 30` presents a moving orange square
-with a fixed blue orientation marker. The shared `boat-render` crate owns the
+with a fixed blue orientation marker. The shared `trimui-brick-render` crate owns the
 readiness and display logic. There are no external game assets or audio devices.
 
 From the repository root:
 
 ```sh
-python3 tools/device/build_bevy_spike.py
-python3 tools/device/package_bevy_spike.py --seconds 30
-python3 tools/device/install_app.py \
-  --package dist/Apps/boat-bevy-wgpu --app-name boat-bevy-wgpu
-# Select "boat (Bevy WGPU)" in Apps, then wait for automatic return.
-python3 tools/device/collect_bevy_spike.py
+uv run tools/device/build_bevy_spike.py
+uv run tools/device/package_bevy_spike.py --seconds 30
+uv run tools/device/install_app.py \
+  --package dist/Apps/brick-bevy-demo --app-name brick-bevy-demo
+# Select "Brick Pro (Bevy Demo)" in Apps, then wait for automatic return.
+uv run tools/device/collect_bevy_spike.py
 ```
 
 Guide/Start exits early; the process watchdog bounds a wedged diagnostic run.

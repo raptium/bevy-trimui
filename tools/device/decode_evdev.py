@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Decode a raw evdev byte stream captured from the Brick.
 
-Usage:  python3 tools/device/decode_evdev.py <raw-file>
+Usage:  uv run tools/device/decode_evdev.py <raw-file>
 
 struct input_event on 64-bit Linux is 24 bytes:
     0..15  struct timeval { __kernel_long_t tv_sec, tv_usec }
