@@ -1,0 +1,21 @@
+[package]
+name = "boat-wgpu-probe"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+# Keep experiments and their dependency resolution separate from the game.
+[workspace]
+
+[features]
+display-import = []
+
+[dependencies]
+wgpu = { version = "=29.0.4", default-features = false, features = ["std", "vulkan", "wgsl"] }
+env_logger = "=0.11.10"
+ash = { version = "=0.38.0", default-features = false, features = ["std", "loaded", "debug"] }
+
+[profile.release]
+opt-level = 2
+panic = "abort"
+strip = "symbols"

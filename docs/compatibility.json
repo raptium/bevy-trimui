@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "scope": "Dated observations on one TrimUI Brick Pro; not a hardware-family guarantee",
+  "device": {
+    "model": "TrimUI Brick Pro",
+    "firmware": "1.1.2",
+    "system_build": "tina.raymanfeng.20260828.020940",
+    "kernel": "4.9.191",
+    "gpu": "PowerVR Rogue GE8300",
+    "gpu_bvnc": "22.102.54.38",
+    "gpu_ddk": "1.19@6345021",
+    "vulkan_api": "1.3.225",
+    "max_texture_dimension_2d": 4096,
+    "panel_pixels": [1024, 768],
+    "observed_at": "2026-10-08"
+  },
+  "supported_source_baseline": {
+    "bevy": "0.19.1",
+    "wgpu": "29.0.4",
+    "ash": "0.38.0",
+    "target": "aarch64-unknown-linux-gnu",
+    "link_glibc_floor": "2.25",
+    "device_glibc_observed": "2.33",
+    "build": "python3 tools/device/build_bevy_spike.py",
+    "example_enables_audio": false
+  },
+  "required_local_patches": ["pvr-timeline-values", "wgpu-hal-display-import", "wgpu-core-display-import", "wgpu-display-import"],
+  "historical_results": [
+    {"date": "2026-10-08", "check": "wgpu offscreen and display readback", "status": "passed_on_reference_device"},
+    {"date": "2026-10-08", "check": "14 shader cases", "status": "mixed", "details": "troubleshooting.md"},
+    {"date": "2026-10-09", "check": "Bevy 0.19.1 offscreen pixels", "status": "passed_on_reference_device"},
+    {"date": "2026-10-09", "check": "Bevy 0.19.1 launcher animation and human panel observation", "status": "passed_on_reference_device", "binary_sha256": "9466b9f91b6b39477084ef119233a85a986db2e5c6e7fe117befb88e49ca3621"},
+    {"date": "2026-10-09", "check": "separate Bevy 0.20 / wgpu 30.0.1 launcher experiment", "status": "passed_historical_not_shipped", "required_feature": "wgpu/drm"},
+    {"date": "2026-10-17", "check": "separate game speaker listening", "status": "passed_historical_not_shipped", "cpal": "0.17.3", "format": "stereo S16_LE 48000 Hz", "period_frames": 1024, "buffer_frames": 2048, "binary_sha256": "c445ad7788d32f59646289f878eb8cd313fca4e9d3b610f9d1c3423bcd6944bc"}
+  ],
+  "new_build_gates": ["source_and_build", "elf_and_runtime_libraries", "offscreen_pixels", "launcher_surface_and_animation_pixels", "human_panel_input_and_optional_listening"],
+  "launcher_verification_command": "python3 tools/device/collect_bevy_spike.py",
+  "animation_success_marker": "BEVY_ANIMATION_PASSED",
+  "not_established": ["original TrimUI Brick", "other firmware or DDK", "all Bevy plugins", "3D and postprocessing", "long-duration stability", "suspend and resume", "headphone and Bluetooth audio"],
+  "raw_historical_archives_included": false
+}

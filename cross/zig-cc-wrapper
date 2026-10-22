@@ -1,0 +1,9 @@
+#!/usr/bin/env python3
+"""Zig Rust linker shim; preserve spaces and exact argument boundaries."""
+import os
+import sys
+
+args = [arg for arg in sys.argv[1:]
+        if arg != "--fix-cortex-a53-843419" and not arg.endswith("-Wl,--fix-cortex-a53-843419")]
+os.execvp("zig", ["zig", "cc", "-target", "aarch64-linux-gnu.2.25",
+                  "-Wl,-rpath,/rom/usr/trimui/lib", *args])

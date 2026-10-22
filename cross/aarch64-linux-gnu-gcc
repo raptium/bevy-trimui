@@ -1,0 +1,12 @@
+#!/usr/bin/env python3
+"""C build-script shim for Zig; preserve spaces and translate cc-rs flags."""
+import os
+import sys
+
+args = []
+for arg in sys.argv[1:]:
+    if arg == "--fix-cortex-a53-843419" or arg.endswith("-Wl,--fix-cortex-a53-843419"):
+        continue
+    args.append({"--target=aarch64-unknown-linux-gnu": "--target=aarch64-linux-gnu",
+                 "-Oz": "-Os"}.get(arg, arg))
+os.execvp("zig", ["zig", "cc", "-target", "aarch64-linux-gnu.2.25", *args])

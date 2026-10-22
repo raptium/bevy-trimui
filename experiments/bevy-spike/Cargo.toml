@@ -1,0 +1,31 @@
+[package]
+name = "boat-bevy-spike"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+# Keep experiments and their dependency resolution separate from the game.
+[workspace]
+
+[dependencies]
+bevy = { version = "=0.19.1", default-features = false, features = [
+    "default_app",
+    "std",
+    "multi_threaded",
+    "bevy_asset",
+    "bevy_image",
+    "bevy_log",
+    "bevy_render",
+    "bevy_sprite",
+    "bevy_sprite_render",
+    "png",
+] }
+# Direct evdev reader for the pad-based exit (src/evdev.rs).
+libc = "0.2"
+boat-render = { path = "../../crates/boat-render", features = ["brick-display"] }
+serde_json = "1"
+
+[profile.release]
+opt-level = 2
+panic = "abort"
+strip = "symbols"
