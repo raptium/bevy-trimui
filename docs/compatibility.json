@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "scope": "Dated observations on one TrimUI Brick Pro; not a hardware-family guarantee",
+  "scope": "TRIMUI platform toolkit; dated observations on one Brick Pro only, not a hardware-family guarantee",
   "device": {
     "model": "TrimUI Brick Pro",
     "firmware": "1.1.2",

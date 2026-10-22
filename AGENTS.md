@@ -1,6 +1,8 @@
 # Agent entrypoint
 
-This is an asset-free Brick Pro platform kit. Run commands from this checkout's
+This is Bevy TRIMUI, a public platform library and toolkit. Only the Brick Pro
+reference device has been tested; other TRIMUI models need their own evidence.
+Run commands from this checkout's
 root with `uv run`; dependencies belong in `pyproject.toml` and `uv.lock`.
 Use the project environment for Python tools; do not add requirements files or
 manual environment setup. `SOURCE-MANIFEST.json` records provenance, not a test run.
@@ -13,13 +15,18 @@ Read only what the task needs:
 - Audio: [audio](docs/audio.md) and `tools/device/brick_audio.py`.
 - Diagnose a failure: [troubleshooting](docs/troubleshooting.md).
 - Interpret or report tests: [evidence](docs/evidence.md).
-- Reusable task instructions: [Skill](skills/trimui-brick-bevy/SKILL.md).
+- Reusable task instructions: [Skill](skills/bevy-trimui/SKILL.md).
+
+When consumed by a private application, follow [the two-repository workflow](docs/development.md).
+Commit and push platform changes from this repository only. Private application
+code, art, content, saves, credentials and device dumps do not belong here.
+The application should pin a validated platform commit.
 
 Preserve these constraints:
 
 - The supported baseline is Bevy **0.19.1**, wgpu **29.0.4**. Do not upgrade as
   an incidental fix. Match the HAL/core/wgpu versions when preparing patches.
-- Run the Python build entrypoint; plain `cargo build` with `brick-display`
+- Run the Python build entrypoint; plain `cargo build` with `direct-display`
   lacks private surface-import APIs until local patches are configured.
 - Patches go into `.scratch/` copies, never the Cargo registry or device `.so`s.
   Patch-anchor mismatches require source review, not a fuzzy replacement.

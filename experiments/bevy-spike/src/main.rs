@@ -12,7 +12,7 @@
 //! The scene carries an asymmetric marker so a vertical flip anywhere in the
 //! chain (image orientation, blit uv mapping) shows up in both PPMs.
 
-use trimui_brick_render::{CaptureImage, DisplayPresentPlugin, FrameMetadata, RenderReadiness};
+use bevy_trimui::{CaptureImage, DisplayPresentPlugin, FrameMetadata, RenderReadiness};
 mod evdev;
 
 use std::{
@@ -192,7 +192,7 @@ fn main() -> AppExit {
     });
     app.add_systems(Update, animate_scene);
     app.insert_resource(ClearColor(Color::srgb(0.05, 0.05, 0.1)));
-    let target = trimui_brick_render::add_offscreen_target(&mut app, WIDTH, HEIGHT);
+    let target = bevy_trimui::add_offscreen_target(&mut app, WIDTH, HEIGHT);
     app.add_systems(Last, record_scene_metadata);
     app.add_systems(Startup, setup);
 

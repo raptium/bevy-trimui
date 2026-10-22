@@ -1,11 +1,11 @@
 [package]
-name = "trimui-brick-render"
+name = "bevy-trimui"
 version = "0.1.0"
 edition = "2024"
 publish = false
 
 [features]
-brick-display = ["dep:wgpu", "dep:ash"]
+direct-display = ["dep:wgpu", "dep:ash"]
 
 [dependencies]
 bevy = { workspace = true, features = ["bevy_render", "bevy_sprite_render", "bevy_log"] }

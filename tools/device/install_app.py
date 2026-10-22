@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Install a packaged Brick Pro launcher App onto the Brick's SD card over SSH.
+"""Install a packaged TRIMUI launcher App onto its SD card over SSH.
 
 Streams a compressed tar into a temporary folder, verifies the binary hash,
 then replaces the app while preserving its save directory and run evidence. The
@@ -20,28 +20,33 @@ import tempfile
 
 ROOT = Path(__file__).resolve().parents[2]
 SSH = ROOT / "ssh.sh"
-APP = "brick-bevy-demo"
+APP = "bevy-trimui-demo"
 
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--package", type=Path, default=ROOT / "dist/Apps" / APP)
     ap.add_argument("--app-name", default=APP,
-                    help="launcher directory name (default: brick-bevy-demo)")
+                    help="launcher directory name")
+    ap.add_argument("--executable", default=APP,
+                    help="executable filename inside the package")
     ap.add_argument("--remote-dir", default="/mnt/SDCARD/Apps",
                     help="Apps directory on the device's SD card")
     args = ap.parse_args()
     if not re.fullmatch(r"[a-z0-9][a-z0-9-]{0,63}", args.app_name):
         ap.error("--app-name must be a lowercase launcher directory name")
     app = args.app_name
+    executable = args.executable
+    if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]{0,127}", executable):
+        ap.error("--executable must be a simple filename")
 
     package = args.package.resolve()
-    for required in ("brick-bevy-demo", "launch.sh", "config.json"):
+    for required in (executable, "launch.sh", "config.json"):
         if not (package / required).is_file():
             raise SystemExit(f"{package}/{required} missing; run the appropriate package_* tool first")
 
     remote = args.remote_dir.rstrip("/")
-    digest = hashlib.sha256((package / "brick-bevy-demo").read_bytes()).hexdigest()
+    digest = hashlib.sha256((package / executable).read_bytes()).hexdigest()
     remote_cmd = "set -eu\ncd " + shlex.quote(remote) + "\n" + r"""
 stage=$(mktemp -d .APP_NAME-install.XXXXXX)
 cleanup() {
@@ -52,9 +57,9 @@ cleanup() {
 }
 trap cleanup EXIT HUP INT TERM
 tar -xzf - -C "$stage"
-test -x "$stage/APP_NAME/brick-bevy-demo"
+test -x "$stage/APP_NAME/EXECUTABLE_NAME"
 test -f "$stage/APP_NAME/config.json"
-printf '%s  %s\n' BINARY_HASH "$stage/APP_NAME/brick-bevy-demo" | sha256sum -c -
+printf '%s  %s\n' BINARY_HASH "$stage/APP_NAME/EXECUTABLE_NAME" | sha256sum -c -
 if [ -d APP_NAME/save ]; then
     cp -a APP_NAME/save/. "$stage/APP_NAME/save/"
 fi
@@ -64,7 +69,10 @@ if ! mv "$stage/APP_NAME" APP_NAME; then
     exit 1
 fi
 ls -l APP_NAME
-""".replace("APP_NAME", app).replace("BINARY_HASH", shlex.quote(digest))
+"""
+    substitutions = {"APP_NAME": app, "EXECUTABLE_NAME": executable, "BINARY_HASH": digest}
+    remote_cmd = re.sub(r"\b(APP_NAME|EXECUTABLE_NAME|BINARY_HASH)\b",
+                        lambda match: substitutions[match[0]], remote_cmd)
     with tempfile.TemporaryFile() as payload:
         with tarfile.open(fileobj=payload, mode="w:gz", compresslevel=1) as archive:
             archive.add(package, arcname=app)

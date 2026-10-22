@@ -1,7 +1,7 @@
 [project]
-name = "bevy-trimui-brick-pro-tools"
+name = "bevy-trimui-tools"
 version = "0.1.0"
-description = "Build, package and diagnose native Bevy on TrimUI Brick Pro"
+description = "Build, package and diagnose native Bevy on TRIMUI handhelds"
 requires-python = ">=3.12"
 dependencies = [
     "pillow>=12,<13",

@@ -1,12 +1,16 @@
-# 在 TrimUI Brick Pro 上运行 Bevy
+# Bevy TRIMUI
 
 > **本项目全部由 AI 制作，使用风险及后果自负，不作任何担保。**
 > 在法律允许的最大范围内，作者不承担责任，包括设备损坏、变砖或爆炸。
 > 直白地说：机器爆炸了，也别找作者负责。详见[免责声明](DISCLAIMER.md)。
 
-这是一套独立的 Brick Pro 平台工具：原生 Bevy / wgpu Vulkan 渲染、
+这是一套面向 TRIMUI 掌机的独立平台工具：原生 Bevy / wgpu Vulkan 渲染、
 `VK_KHR_display` 上屏、evdev 退出、厂商驱动兼容补丁和像素验收工具。
 不需要游戏美术、字体、设备私有库或原项目 Git 历史。
+
+目前只有 **Brick Pro** 的实机验证，因为维护者手上只有这台设备。
+这套方式可能适用于其他 TRIMUI 机型，但还需要逐台核对固件、GPU 驱动、显示、输入和音频；
+项目名不代表全机型已经兼容。
 
 已验证基线：**Brick Pro，固件 1.1.2，PowerVR GE8300，DDK 1.19@6345021，
 Bevy 0.19.1 / wgpu 29.0.4**。2026-10-09 的实机动画完成多帧像素核对，
@@ -15,7 +19,7 @@ Bevy 0.19.1 / wgpu 29.0.4**。2026-10-09 的实机动画完成多帧像素核对
 
 先读 [英文主文档](README.md) 中的环境、构建、SSH 设置与部署命令。
 AI 从 [AGENTS.md](AGENTS.md) 开始，或使用
-[trimui-brick-bevy Skill](skills/trimui-brick-bevy/SKILL.md)。
+[bevy-trimui Skill](skills/bevy-trimui/SKILL.md)。
 
 ```sh
 rustup target add aarch64-unknown-linux-gnu
@@ -23,7 +27,7 @@ uv run tools/device/build_bevy_spike.py
 uv run tools/device/package_bevy_spike.py --seconds 30
 # 配好自己的 ssh.local.sh 后安装
 uv run tools/device/install_app.py \
-  --package dist/Apps/brick-bevy-demo --app-name brick-bevy-demo
+  --package dist/Apps/bevy-trimui-demo --app-name bevy-trimui-demo
 # 在掌机 Apps 里启动，等自动返回后收集
 uv run tools/device/collect_bevy_spike.py
 ```
@@ -31,7 +35,7 @@ uv run tools/device/collect_bevy_spike.py
 安装 Rust 和 [uv](https://docs.astral.sh/uv/getting-started/installation/) 后，
 直接从仓库根目录运行以上命令。`uv run` 会自动管理 Python 环境，并按 `uv.lock`
 安装 Pillow 和 Zig，无需手动激活虚拟环境或另装 Zig。
-平台 crate 名为 `trimui-brick-render`，掌机 Apps 中显示为 `Brick Pro (Bevy Demo)`。
+平台 crate 名为 `bevy-trimui`，掌机 Apps 中显示为 `Bevy TRIMUI Demo`。
 
 成功标志是 `BEVY_ANIMATION_PASSED`，包含二进制哈希、退出状态、多帧实际像素与
 场景坐标核对。编译成功、进程退出 0、不断调用 present，都不能单独证明上屏正确。
@@ -44,6 +48,7 @@ uv run tools/device/collect_bevy_spike.py
 - [音频](docs/audio.md)：ALSA 独立配置、S16_LE／48 kHz、CPAL 局部补丁与听音验收。
 - [故障排查](docs/troubleshooting.md)：黑图、闪屏、shader、缓存与 SSH。
 - [验证记录](docs/evidence.md)：历史实机结果、未测范围及新机器的验收方法。
+- [两个仓库的开发流程](docs/development.md)：私有应用通过 Git submodule 使用公共平台，验证后再上游提交。
 - [机器可读兼容记录](docs/compatibility.json)：供 AI 自动定位版本、结果和复现命令。
 
 原创代码、文档和 Skill 采用 MIT；上游依赖保持原许可。固件快照由使用者自行采集，

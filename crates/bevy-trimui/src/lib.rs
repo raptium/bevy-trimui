@@ -1,9 +1,9 @@
 //! Native Bevy rendering helpers shared by the game and hardware probes.
 //! Vulkan display ownership and the blit are confined to the Brick feature.
 
-#[cfg(feature = "brick-display")]
+#[cfg(feature = "direct-display")]
 mod display;
-#[cfg(feature = "brick-display")]
+#[cfg(feature = "direct-display")]
 pub use display::DisplayPresentPlugin;
 
 use bevy::camera::RenderTarget;

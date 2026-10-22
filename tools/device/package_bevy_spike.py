@@ -6,8 +6,8 @@ SSH shares the display with the launcher and flickers, so it cannot be judged
 by eye. Apps started from the launcher get the screen, so the visual check
 uses this self-contained layout:
 
-  dist/Apps/brick-bevy-demo/
-    brick-bevy-demo  the cross-built demo binary
+  dist/Apps/bevy-trimui-demo/
+    bevy-trimui-demo  the cross-built demo binary
     launch.sh    runs --display for a bounded time, then exits to the launcher
     config.json  launcher metadata (scanned from <sdcard>/Apps/*/config.json)
     icon.png     the procedural demo icon
@@ -26,8 +26,8 @@ import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parents[2]
-APP = "brick-bevy-demo"
-BINARY = ROOT / ".scratch/bevy-spike/target/aarch64-unknown-linux-gnu/release/brick-bevy-demo"
+APP = "bevy-trimui-demo"
+BINARY = ROOT / ".scratch/bevy-spike/target/aarch64-unknown-linux-gnu/release/bevy-trimui-demo"
 
 
 def main() -> None:
@@ -58,8 +58,8 @@ def main() -> None:
         shutil.rmtree(package)
     (package / "save").mkdir(parents=True)
 
-    shutil.copy2(binary, package / "brick-bevy-demo")
-    (package / "brick-bevy-demo").chmod(0o755)
+    shutil.copy2(binary, package / "bevy-trimui-demo")
+    (package / "bevy-trimui-demo").chmod(0o755)
     shutil.copy2(build_file, package / "build.json")
 
     launch = package / "launch.sh"
@@ -79,7 +79,7 @@ printf '%s\\n' "$run_name" > "$progdir/save/last-run.txt"
 cd "$run_dir" || exit 1
 cp "$progdir/build.json" build.json || exit 1
 printf 'stage=launcher_run seconds={args.seconds}\\n' > spike.log
-"$progdir/brick-bevy-demo" --display --animate --seconds {args.seconds} >> spike.log 2>&1
+"$progdir/bevy-trimui-demo" --display --animate --seconds {args.seconds} >> spike.log 2>&1
 code=$?
 printf '%s\\n' "$code" > exit-code.txt
 exit "$code"
@@ -87,9 +87,9 @@ exit "$code"
     launch.chmod(0o755)
 
     (package / "config.json").write_text(json.dumps({
-        "package": "io.github.raptium.brick.bevy",
-        "label": "Brick Pro (Bevy Demo)",
-        "label.ch.lang": "Brick Pro (Bevy 演示)",
+        "package": "io.github.raptium.bevy.trimui",
+        "label": "Bevy TRIMUI Demo",
+        "label.ch.lang": "Bevy TRIMUI 演示",
         "icontop": "icon.png",
         "icon": "",
         "launch": "launch.sh",

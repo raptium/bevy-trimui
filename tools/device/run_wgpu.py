@@ -20,7 +20,7 @@ ROOT = Path(__file__).resolve().parents[2]
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--binary", type=Path, default=ROOT / ".scratch/wgpu-probe/target/aarch64-unknown-linux-gnu/release/brick-wgpu-probe")
+    ap.add_argument("--binary", type=Path, default=ROOT / ".scratch/wgpu-probe/target/aarch64-unknown-linux-gnu/release/bevy-trimui-wgpu-probe")
     ap.add_argument("--output", type=Path)
     ap.add_argument("--timeout", type=int, default=240,
                     help="SSH timeout including compressed binary transfer and execution")
@@ -60,7 +60,7 @@ def main() -> None:
     output = (args.output or ROOT / ".scratch/wgpu-probe/runs" / datetime.now().strftime("%Y%m%d-%H%M%S")).resolve()
     output.mkdir(parents=True, exist_ok=False)
     remote = r"""set -u
-run_dir=$(mktemp -d /tmp/brick-wgpu-probe.XXXXXX) || exit 1
+run_dir=$(mktemp -d /tmp/bevy-trimui-wgpu-probe.XXXXXX) || exit 1
 child=
 watcher=
 cleanup() {

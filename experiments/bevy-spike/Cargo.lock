@@ -229,6 +229,26 @@ dependencies = [
 ]
 
 [[package]]
+name = "bevy-trimui"
+version = "0.1.0"
+dependencies = [
+ "ash",
+ "bevy",
+ "serde_json",
+ "wgpu",
+]
+
+[[package]]
+name = "bevy-trimui-demo"
+version = "0.1.0"
+dependencies = [
+ "bevy",
+ "bevy-trimui",
+ "libc",
+ "serde_json",
+]
+
+[[package]]
 name = "bevy_a11y"
 version = "0.19.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1161,16 +1181,6 @@ dependencies = [
  "futures-io",
  "futures-lite",
  "piper",
-]
-
-[[package]]
-name = "brick-bevy-demo"
-version = "0.1.0"
-dependencies = [
- "bevy",
- "libc",
- "serde_json",
- "trimui-brick-render",
 ]
 
 [[package]]
@@ -2960,16 +2970,6 @@ dependencies = [
  "tracing",
  "tracing-subscriber",
  "wasm-bindgen",
-]
-
-[[package]]
-name = "trimui-brick-render"
-version = "0.1.0"
-dependencies = [
- "ash",
- "bevy",
- "serde_json",
- "wgpu",
 ]
 
 [[package]]

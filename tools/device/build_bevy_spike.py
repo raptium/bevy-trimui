@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Cross-build the native Bevy probe with real dependencies and local patches.
 
-The demo uses crates/trimui-brick-render for display and readiness. Driver
+The demo uses crates/bevy-trimui for display and readiness. Driver
 compatibility changes remain in isolated wgpu vendor copies; no registry edit.
 """
 import argparse
@@ -44,11 +44,11 @@ if args.offline:
 for config in configs:
     cmd += ["--config", config]
 subprocess.run(cmd, cwd=ROOT, env=env, check=True)
-binary = ROOT / ".scratch/bevy-spike/target/aarch64-unknown-linux-gnu/release/brick-bevy-demo"
+binary = ROOT / ".scratch/bevy-spike/target/aarch64-unknown-linux-gnu/release/bevy-trimui-demo"
 sources = [ROOT / "experiments/bevy-spike" / p for p in ("Cargo.toml", "Cargo.lock")]
 sources += sorted((ROOT / "experiments/bevy-spike/src").rglob("*.*"))
-sources += [ROOT / "Cargo.toml", ROOT / "crates/trimui-brick-render/Cargo.toml"]
-sources += sorted((ROOT / "crates/trimui-brick-render/src").rglob("*.*"))
+sources += [ROOT / "Cargo.toml", ROOT / "crates/bevy-trimui/Cargo.toml"]
+sources += sorted((ROOT / "crates/bevy-trimui/src").rglob("*.*"))
 sources += [ROOT / path for path in (
     ".cargo/config.toml", "cross/zig", "cross/zig-cc-wrapper", "cross/aarch64-linux-gnu-gcc",
     "pyproject.toml", "uv.lock",

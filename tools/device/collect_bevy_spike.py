@@ -23,14 +23,14 @@ def main() -> None:
               datetime.now().strftime("%Y%m%d-%H%M%S-launcher")).resolve()
     output.mkdir(parents=True, exist_ok=False)
     remote = r"""set -eu
-cd /mnt/SDCARD/Apps/brick-bevy-demo
+cd /mnt/SDCARD/Apps/bevy-trimui-demo
 run=$(cat save/last-run.txt)
 printf '%s\n' "$run" | grep -Eq '^run-[0-9]{8}-[0-9]{6}-[0-9]+$' || exit 2
 if [ ! -f "save/$run/exit-code.txt" ]; then
     printf 'Latest run has not finished: %s\n' "$run" >&2
     exit 3
 fi
-sha256sum brick-bevy-demo >&2
+sha256sum bevy-trimui-demo >&2
 cat /sys/kernel/debug/pvr/status >&2
 tar -czf - build.json save/last-run.txt "save/$run"
 """
@@ -49,7 +49,7 @@ tar -czf - build.json save/last-run.txt "save/$run"
         raise SystemExit("Invalid run identifier")
     run_dir = output / "save" / run
     build = json.loads((run_dir / "build.json").read_text())
-    installed = re.search(rb"^([a-f0-9]{64})  brick-bevy-demo$", result.stderr, re.MULTILINE)
+    installed = re.search(rb"^([a-f0-9]{64})  bevy-trimui-demo$", result.stderr, re.MULTILINE)
     if not installed or installed[1].decode() != build["binary_sha256"]:
         raise SystemExit("Installed binary does not match collected build metadata")
     code = int((run_dir / "exit-code.txt").read_text())

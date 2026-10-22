@@ -40,7 +40,7 @@ def main() -> None:
            "-O2", str(source), "-ldl", "-o", str(binary)]
     subprocess.run(cmd, env=env, check=True)
     remote = """set -eu
-probe_path=$(mktemp /tmp/brick-vulkan-probe.XXXXXX)
+probe_path=$(mktemp /tmp/bevy-trimui-vulkan-probe.XXXXXX)
 trap 'rm -f "$probe_path"' EXIT
 cat > "$probe_path"
 chmod 700 "$probe_path"

@@ -181,7 +181,7 @@ fn run() -> Result<()> {
         "stage=device required_limits=wgpu_defaults_with_adapter_resolution required_features=empty"
     );
     let (device, queue) = block_on(adapter.request_device(&wgpu::DeviceDescriptor {
-        label: Some("brick-wgpu-probe"),
+        label: Some("bevy-trimui-wgpu-probe"),
         required_limits,
         memory_hints: wgpu::MemoryHints::MemoryUsage,
         ..Default::default()

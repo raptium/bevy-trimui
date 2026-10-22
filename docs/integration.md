@@ -2,7 +2,7 @@
 
 ## Rendering boundary
 
-`crates/trimui-brick-render` is the shared platform layer. The minimal example in
+`crates/bevy-trimui` is the shared platform layer. The minimal example in
 `experiments/bevy-spike/src/main.rs` exercises it without game assets.
 
 ```text
@@ -10,7 +10,7 @@ Bevy main world: Camera2d + Sprite + Transform
     -> extraction / native Bevy render graph
     -> 1024x768 Rgba8UnormSrgb image target
     -> render_system completes GPU submission
-    -> trimui-brick-render fullscreen blit
+    -> bevy-trimui fullscreen blit
     -> imported VK_KHR_display surface / swapchain / present
 ```
 
@@ -35,7 +35,7 @@ frame may be black even when later frames are correct.
 ## Dependencies and patches
 
 Keep Bevy `=0.19.1`, wgpu/hal/core `29.0.4` and ash `=0.38.0` aligned with the
-lockfiles. Enable `trimui-brick-render/brick-display` only for the handheld path. The
+lockfiles. Enable `bevy-trimui/direct-display` only for the handheld path. The
 crate currently inherits Bevy from the root workspace; when moving it, carry
 over that dependency declaration or replace it with the same explicit features.
 `publish = false` reflects that it uses a locally patched wgpu API; this is a
@@ -44,7 +44,7 @@ source integration kit rather than a published crates.io plugin.
 `tools/device/build_bevy_spike.py` fetches real crates, copies three wgpu crates
 into `.scratch/wgpu-probe/vendor`, applies exact-anchor changes and passes Cargo
 `--config patch.crates-io.<crate>.path=...` overrides. Reuse this configuration
-for an application manifest. A plain build with `brick-display` cannot find
+for an application manifest. A plain build with `direct-display` cannot find
 `import_display_surface` / `create_surface_from_hal` in unpatched wgpu.
 
 The two independent modifications are:
@@ -83,7 +83,7 @@ patches and the `.build.json` alongside each binary.
 ## Input
 
 The example's `src/evdev.rs` probes `/dev/input/event0..11` by capability rather
-than assuming event0. `BRICK_EVDEV` overrides the path. It decodes 24-byte
+than assuming event0. `BEVY_TRIMUI_EVDEV` overrides the path. It decodes 24-byte
 little-endian `input_event` records for 64-bit Linux. Guide (`0x13c`) and Start
 (`0x13b`) exit on a press. This small reader is an exit mechanism, not a complete
 controller abstraction or reconnection layer.

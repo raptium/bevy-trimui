@@ -37,7 +37,7 @@ int main(void) {
     for (uint32_t i = 0; i < count; ++i) printf("instance_extension=%s version=%u\n", exts[i].extensionName, exts[i].specVersion);
     free(exts);
     VkApplicationInfo app = { .sType = VK_STRUCTURE_TYPE_APPLICATION_INFO,
-        .pApplicationName = "brick-capability-probe", .apiVersion = VK_API_VERSION_1_0 };
+        .pApplicationName = "bevy-trimui-capability-probe", .apiVersion = VK_API_VERSION_1_0 };
     VkInstanceCreateInfo info = { .sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO, .pApplicationInfo = &app };
     PFN_vkCreateInstance create = (PFN_vkCreateInstance)get(VK_NULL_HANDLE, "vkCreateInstance");
     VkInstance instance;

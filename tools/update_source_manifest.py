@@ -27,7 +27,7 @@ def main():
             hashes[name] = hashlib.sha256(source.read_bytes()).hexdigest()
     path.write_text(json.dumps({
         "schema_version": 2,
-        "kit": "bevy-trimui-brick-pro",
+        "kit": "bevy-trimui",
         "origin": origin,
         "note": "Current source-file inventory, excluding this manifest and ignored generated files. Original revision identifies pre-extraction provenance, not a device test. Refresh with uv run tools/update_source_manifest.py.",
         "files_sha256": hashes,

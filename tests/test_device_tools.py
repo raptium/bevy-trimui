@@ -9,7 +9,7 @@ import tempfile
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
-APP = "brick-bevy-demo"
+APP = "bevy-trimui-demo"
 
 
 class DeviceToolsTest(unittest.TestCase):
@@ -25,7 +25,7 @@ class DeviceToolsTest(unittest.TestCase):
             self.run_tool("package_bevy_spike.py", "--binary", binary,
                           "--dest", package.parent, "--seconds", "2")
             config = json.loads((package / "config.json").read_text())
-            self.assertEqual(config["label"], "Brick Pro (Bevy Demo)")
+            self.assertEqual(config["label"], "Bevy TRIMUI Demo")
             self.assertTrue((package / APP).is_file())
             subprocess.run(["sh", "-n", str(package / "launch.sh")], check=True)
 
@@ -42,15 +42,15 @@ class DeviceToolsTest(unittest.TestCase):
             wrapper = base / "ssh-fixture"
             wrapper.write_text(
                 "#!/usr/bin/env python3\nimport os,subprocess,sys\n"
-                "command = sys.argv[-1].replace('/mnt/SDCARD/Apps/brick-bevy-demo', "
-                "__import__('shlex').quote(os.environ['BRICK_TEST_APP']))\n"
+                "command = sys.argv[-1].replace('/mnt/SDCARD/Apps/bevy-trimui-demo', "
+                "__import__('shlex').quote(os.environ['BEVY_TRIMUI_TEST_APP']))\n"
                 "command = command.replace('cat /sys/kernel/debug/pvr/status', "
                 "\"printf 'GPU fixture OK\\\\n'\")\n"
                 "sys.exit(subprocess.run(['sh', '-c', command]).returncode)\n"
             )
             wrapper.chmod(0o755)
-            env = dict(os.environ, BRICK_SSH_WRAPPER=str(wrapper),
-                       BRICK_TEST_APP=str(installed),
+            env = dict(os.environ, BEVY_TRIMUI_SSH_WRAPPER=str(wrapper),
+                       BEVY_TRIMUI_TEST_APP=str(installed),
                        PATH=str(commands) + os.pathsep + os.environ["PATH"])
             for attempt in range(2):
                 self.run_tool("install_app.py", "--package", package,
@@ -79,6 +79,15 @@ class DeviceToolsTest(unittest.TestCase):
             collected = json.loads((base / "collected/collection.json").read_text())
             self.assertEqual(collected["binary_sha256"], build["binary_sha256"])
             self.assertEqual(collected["exit_code"], 0)
+
+            # Consumers have their own executable identity and collection logic.
+            custom = "custom-app-runner"
+            (package / APP).rename(package / custom)
+            self.run_tool("install_app.py", "--package", package,
+                          "--remote-dir", remote_apps, "--executable", custom, env=env)
+            self.assertEqual((installed / custom).read_bytes(), binary.read_bytes())
+            self.assertFalse((installed / APP).exists())
+            self.assertEqual((installed / "save/keep.txt").read_text(), "existing progress")
 
     def run_tool(self, name, *arguments, env=None):
         result = subprocess.run([sys.executable, str(ROOT / "tools/device" / name),

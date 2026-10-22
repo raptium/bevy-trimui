@@ -2,7 +2,7 @@
 
 Two colored sprites on a 1024×768 image target. Default mode captures a static
 offscreen PPM; `--display --animate --seconds 30` presents a moving orange square
-with a fixed blue orientation marker. The shared `trimui-brick-render` crate owns the
+with a fixed blue orientation marker. The shared `bevy-trimui` crate owns the
 readiness and display logic. There are no external game assets or audio devices.
 
 From the repository root:
@@ -11,8 +11,8 @@ From the repository root:
 uv run tools/device/build_bevy_spike.py
 uv run tools/device/package_bevy_spike.py --seconds 30
 uv run tools/device/install_app.py \
-  --package dist/Apps/brick-bevy-demo --app-name brick-bevy-demo
-# Select "Brick Pro (Bevy Demo)" in Apps, then wait for automatic return.
+  --package dist/Apps/bevy-trimui-demo --app-name bevy-trimui-demo
+# Select "Bevy TRIMUI Demo" in Apps, then wait for automatic return.
 uv run tools/device/collect_bevy_spike.py
 ```
 

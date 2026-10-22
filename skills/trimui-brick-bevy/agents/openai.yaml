@@ -1,4 +1,0 @@
-interface:
-  display_name: "TrimUI Brick Pro + Bevy"
-  short_description: "Build and verify native Bevy on TrimUI Brick Pro"
-  default_prompt: "Use $trimui-brick-bevy to build or diagnose the native Bevy platform kit and report verified evidence."

@@ -1,9 +1,9 @@
 ---
-name: trimui-brick-bevy
-description: Build, integrate, diagnose and verify native Bevy/wgpu Vulkan applications on TrimUI Brick Pro using the platform kit, local driver workarounds, launcher Apps and pixel evidence. Use for this hardware path, not general Bevy development or original-Brick compatibility claims.
+name: bevy-trimui
+description: Build, integrate, diagnose and verify native Bevy/wgpu applications on TRIMUI handhelds using this platform toolkit. Brick Pro is the only tested reference device; validate other models independently. Keep private consumer applications separate from the public platform repository.
 ---
 
-# TrimUI Brick Pro native Bevy
+# Bevy TRIMUI
 
 Locate the kit checkout from the user's task or workspace. Use `uv run` for its
 Python tools and maintain dependencies in `pyproject.toml` / `uv.lock` rather than
@@ -12,12 +12,16 @@ and `docs/compatibility.json`; when installed separately, resolve these from the
 checkout, not from this skill's install directory. If the kit is missing, ask
 for its location rather than guessing tools, hosts or a clone URL.
 
+Read `docs/development.md` when this checkout is a Git submodule of a private
+application. Publish shared platform changes only within the user's authorized
+scope; never copy the private application, assets, saves or firmware dumps here.
+
 Route by the actual task:
 
 - **First build/run:** read `README.md` and `experiments/bevy-spike/README.md`.
   Use `uv run tools/device/build_bevy_spike.py`; record Rust/Zig versions and the
   resulting `.build.json`. `--offline` requires already cached real crates.
-- **Port an application:** read `docs/integration.md`; reuse `trimui-brick-render`, the
+- **Port an application:** read `docs/integration.md`; reuse `bevy-trimui`, the
   image target, readiness gate, display plugin and local patch configuration.
 - **Device investigation:** read `docs/device.md`. Query the current firmware,
   actual ELF libraries and GPU instead of substituting an older published SDK.

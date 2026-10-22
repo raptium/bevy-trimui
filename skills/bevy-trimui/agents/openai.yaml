@@ -1,0 +1,4 @@
+interface:
+  display_name: "Bevy TRIMUI"
+  short_description: "Build and verify Bevy on TRIMUI handhelds"
+  default_prompt: "Use $bevy-trimui to build or diagnose the native Bevy platform kit and report verified evidence."

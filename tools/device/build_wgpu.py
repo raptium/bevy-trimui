@@ -33,7 +33,7 @@ for crate in crates:
 if args.display:
     cmd += ["--features", "display-import"]
 subprocess.run(cmd, cwd=ROOT, env=env, check=True)
-binary = ROOT / ".scratch/wgpu-probe/target/aarch64-unknown-linux-gnu/release/brick-wgpu-probe"
+binary = ROOT / ".scratch/wgpu-probe/target/aarch64-unknown-linux-gnu/release/bevy-trimui-wgpu-probe"
 sources = [ROOT / "experiments/wgpu-probe" / p for p in ("Cargo.toml", "Cargo.lock")]
 sources += sorted((ROOT / "experiments/wgpu-probe/src").rglob("*.*"))
 sources += [ROOT / path for path in (
